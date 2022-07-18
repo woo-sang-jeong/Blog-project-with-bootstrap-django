@@ -11,6 +11,8 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <!-- Fontawesome -->
+        <script src="https://kit.fontawesome.com/08f292796e.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <!-- Responsive navbar-->
@@ -54,6 +56,27 @@
                         <!-- Post content-->
                         <section class="mb-5">
                             <p class="fs-5 mb-4">{{ post.content }}</p>
+
+                            {% if post.file_upload %}
+                            <a href="{{ post.file_upload.url }}" class="btn btn-outline-dark" role="button">
+                                Download:
+
+                                {% if post.get_file_ext == 'csv' %}
+                                    <i class="fa-solid fa-file-csv"></i>
+                                {% elif post.get_file_ext == 'xlsx' or post.get_file_ext == 'xls' %}
+                                    <i class="fa-solid fa-file-excel"></i>
+                                {% elif post.get_file_ext == 'word' or post.get_file_ext == 'doc' %}
+                                    <i class="fa-solid fa-file-word"></i>
+                                {% elif post.get_file_ext == 'pdf' %}
+                                    <i class="fas fa-file-pdf"></i>
+                                {% elif post.get_file_ext == 'jpg' or post.get_file_ext == 'png' %}
+                                    <i class="fa-solid fa-file-image"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-file"></i>
+                                {% endif %}
+                                    {{ post.get_file_name }}
+                            </a>>
+                            {% endif %}
                         </section>
                     </article>
                     <!-- Comments section-->
