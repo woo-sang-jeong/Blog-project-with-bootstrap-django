@@ -24,10 +24,10 @@
             <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./blog_list.html">blog</a>
+            <a class="nav-link" href="./blog_list.html">Blog</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./about_me.html">About me</a>
+            <a class="nav-link" href="./about_me.html">About Me</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -84,8 +84,12 @@
     <div class="row">
 
       <!-- Blog entries-->
-      <div class="col-lg-8 col-md-8">
+      <div class="col-lg-8 col-md-8" id="main-area">
         <h1>Blog</h1>
+
+
+
+      {% if post_list.exists %}
 
         {% for p in post_list %}
         <!--blog post-->
@@ -106,6 +110,10 @@
           </div>
         </div>
         {% endfor %}
+
+      {% else %}
+        <h3>아직 게시물이 없습니다.</h3>
+      {% endif %}
 
         <!-- Pagination-->
         <nav aria-label="Pagination">
