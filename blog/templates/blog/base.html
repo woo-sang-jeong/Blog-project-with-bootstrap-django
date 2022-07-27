@@ -11,73 +11,7 @@
 
 <h1>Blog</h1>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="./index.html">Do It Django</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="./blog_list.html">Blog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="./about_me.html">About Me</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="modal" data-target="#LoginModal">Log In</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-
-  <!-- Modal -->
-  <div class="modal fade" id="LoginModal" tabindex="-1" aria-labelledby="LoginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="LoginModalLabel"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Log In</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <button type="button" class="btn btn-outline-dark btn-block btn-sm"><i class="fa-brands fa-google"></i>&nbsp;&nbsp; Log in with Goole</button>
-              <button type="button" class="btn btn-outline-dark btn-block btn-sm"><i class="fa-solid fa-square-envelope"></i>&nbsp;&nbsp; Log in with Email</button>
-            </div>
-            <div class="col-md-6">
-              <button type="button" class="btn btn-outline-dark btn-block btn-sm"><i class="fa-solid fa-square-envelope"></i>&nbsp;&nbsp; Sign up with Email</button>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% include 'blog/navbar.html' %}
 
   <!-- Page content-->
   <div class="container my-3">
@@ -133,11 +67,7 @@
     </div>
   </div>
   <!-- Footer-->
-  <footer class="py-5 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Django 2022</p>
-    </div>
-  </footer>
+  {% include 'blog/fooster.html' %}
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
