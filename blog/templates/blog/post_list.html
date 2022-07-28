@@ -22,7 +22,15 @@
             <p class="card-text">{{ p.content | truncatewords:45 }}</p>
             <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
           </div>
+
+
+        <!-- 7/29 추가된 코드 -->
+          <div class="card-footer text-muted">
+            posted on {{ p.created }} by
+            <a href="#">{{ p.author | upper }}</a>
+          </div>
         </div>
+
         {% endfor %}
 
       {% else %}
