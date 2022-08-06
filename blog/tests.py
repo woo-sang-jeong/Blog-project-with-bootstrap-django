@@ -110,13 +110,12 @@ class TestView(TestCase):
         self.assertEqual(Post.objects.count(), 0)
         response = self.client.get('/blog/')
         soup = BeautifulSoup(response.content, 'html.parser')
-        main_area = soup.find('div', id='main_area')
+        main_area = soup.find('div', id='main-area')
 
         # 포스트가 없는 경우를 테스트 하므로 '아직 게시물이 없습니다' 문구가 main_area에 있어야 한다.
-        #self.assertIn('아직 게시물이 없습니다', main_area.text)
+        self.assertIn('아직 게시물이 없습니다', main_area.text)
 
     def test_post_detail(self):
-
         # 포스트의 url은 '/blog/1/' 이다.
         self.assertEqual(self.post_001.get_absolute_url(), '/blog/1/')
 
@@ -125,18 +124,40 @@ class TestView(TestCase):
         response = self.client.get(self.post_001.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
+
         # navbar_text 함수에서 테스트 한다.
         self.navbar_test(soup)
         # 카테고리 테스트 함수 호출
         self.category_card_test(soup)
         # 포스트의 제목이 웹 브라우저 탭 타이틀에 들어있다.
         self.assertIn(self.post_001.title, soup.title.text)
+
         # 포스트의 제목이 포스트 영역에 있다.
         main_area = soup.find('div', id='main-area')
         post_area = main_area.find('div', id='post-area')
         self.assertIn(self.post_001.title, post_area.text)
         self.assertIn(self.category_programming.name, post_area.text)
+
         # 첫 번째 포스트의 작성자가 포스트 영역에 있다.
         self.assertIn(self.user_jus.username.upper(), post_area.text)
         # 포스트의 내용이 포스트 영역에 있다.
         self.assertIn(self.post_001.content, post_area.text)
+
+    def test_category_page(self):
+        # 카테고리 페이지의 고유 URL을 통해 정상적으로 접속되는지 확인한다.
+        response = self.client.get(self.category_programming.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        # BeautifulSoup로 html을 다루기 쉽게 파싱하고 내비게이션바, 카테고리 카드가 제대로 구성되었는지 확인한다.
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.navbar_test(soup)
+        self.category_card_test(soup)
+
+        # 상단의 카테고리 뱃지가 나오는지 확인한다. 페이지에 <h1>태그는 하나밖에 없으므로 태그에 카테고리 이름이 있는지 확인한다.
+        # 카테고리 이름인 programming 있는지 확인한다. 카테고리 이름이 다르거나 없는 post 2,3은 main_area에 없어야 한다.
+        main_area = soup.find('div', id='main-area')
+        self.assertIn(self.category_programming.name, main_area.h1.text)
+        self.assertIn(self.category_programming.name, main_area.text)
+        self.assertIn(self.post_001.title, main_area.text)
+        self.assertNotIn(self.post_002.title, main_area.text)
+        self.assertNotIn(self.post_003.title, main_area.text)
