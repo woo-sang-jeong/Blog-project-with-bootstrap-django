@@ -27,7 +27,7 @@
             <p class="card-text">{{ p.get_content_markdown | truncatewords_html:45 | safe }}</p>
 
             {% if p.tags.exists %}
-                <i class="fas fa-tags"></i>
+                <i class="fa-solid fa-tags"></i>
                 {% for tag in p.tags.iterator %}
                     <a href="{{ tag.get_absolute_url }}"><span class="badge bg-light text-dark">{{ tag }}</span></a>
                 {% endfor %}
