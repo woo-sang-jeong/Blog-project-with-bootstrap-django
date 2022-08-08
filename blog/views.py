@@ -1,7 +1,7 @@
 # FBV 방식으로 제작할 때 필요 : from django.shortcuts import render
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Post, Category
+from .models import Post, Category, Tag
 
 
 # Create your views here.
@@ -25,7 +25,7 @@ class PostDetail(DetailView):
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
 
-# 어느 class 에 속하지 않은 함수이다. urls.py의 5번째 줄과 연결되어 있다.
+# 어느 class 에 속하지 않은 함수들이다. urls.py와 연결 되어 있다.
 def category_page(request, slug):
     if slug == 'no_category':
         category = '미분류'
@@ -42,6 +42,24 @@ def category_page(request, slug):
             'categories': Category.objects.all(),
             'no_category_post_count': Post.objects.filter(category=None).count(),
             'category': category,
+        }
+    )
+
+def tag_page(request, slug):
+    # URL에서 인자로 넘어온 slug와 동일한 slug를 가진 태그를 쿼리셋으로 가져와 tag 변수에 저장한다.
+    tag = Tag.objects.get(slug=slug)
+    # 가져온 태그와 연결된 포스트 전부를 post_list에 저장한다.
+    post_list = tag.post_set.all()
+
+    # 쿼리셋으로 가져온 인자들을 render() 함수안에 딕셔너리 형태로 담는다.
+    return render(
+        request,
+        'blog/post_list.html',
+        {
+            'post_list': post_list,
+            'categories': Category.objects.all(),
+            'no_category_post_count': Post.objects.filter(category=None).count(),
+            'tag': tag
         }
     )
 
