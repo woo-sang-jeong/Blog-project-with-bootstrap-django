@@ -1,6 +1,7 @@
 # FBV 방식으로 제작할 때 필요 : from django.shortcuts import render
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post, Category, Tag
 
 
@@ -24,6 +25,24 @@ class PostDetail(DetailView):
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
+
+class PostCreate(LoginRequiredMixin, CreateView):
+    # model.py의 Post 클라스 모델을 사용한다 선언
+    model = Post
+    # Post 모델에 사용할 필드명을 리스트로 작성하여 fields 변수에 저장
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+
+    def form_valid(self, form):
+        # 웹 사이트 방문자 current_user
+        current_user = self.request.user
+        # 로그인시 form에서 생성한 instance(생성한 포스트)의 author 필드에 current_user를 담는다.
+        # form_valid() 함수에 현재의 form을 인자로 보내 처리한다.
+        if current_user.is_authenticated:
+            form.instance.author = current_user
+            return super(PostCreate, self).form_valid(form)
+        # 비로그인시 redirect() 함수에 의해 /blog/ 로 되돌려 보낸다.
+        else:
+            return redirect('/blog/')
 
 # 어느 class 에 속하지 않은 함수들이다. urls.py와 연결 되어 있다.
 def category_page(request, slug):

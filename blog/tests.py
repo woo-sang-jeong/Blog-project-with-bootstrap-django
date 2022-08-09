@@ -9,8 +9,8 @@ from .models import Post, Category, Tag
 class TestView(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user_jus = User.objects.create_user(username='jus', password='wltn145890!')
-        self.user_woosang = User.objects.create_user(username='woosang', password='wltn145890!')
+        self.user_jus = User.objects.create_user(username='jus', password='123123')
+        self.user_woosang = User.objects.create_user(username='woosang', password='123456')
 
         self.category_programming = Category.objects.create(name='programming', slug='programming')
         self.category_music = Category.objects.create(name='music', slug='music')
@@ -194,10 +194,38 @@ class TestView(TestCase):
         self.navbar_test(soup)
         self.category_card_test(soup)
 
-
         main_area = soup.find('div', id='main-area')
         self.assertIn(self.tag_python.name, main_area.h1.text)
         self.assertIn(self.tag_python.name, main_area.text)
         self.assertIn(self.post_001.title, main_area.text)
         self.assertNotIn(self.post_002.title, main_area.text)
         self.assertNotIn(self.post_003.title, main_area.text)
+
+    def test_create_post(self):
+        response = self.client.get('/blog/create_post/')
+        self.assertNotEqual(response.status_code, 200)
+
+        self.client.login(username='jus', password='123123')
+
+        response = self.client.get('/blog/create_post/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.assertEqual('Create Post - Blog', soup.title.text)
+        main_area = soup.find('div', id='main-area')
+        self.assertIn('Create New Post', main_area.text)
+
+        # 첫번째 인수로 URL, 두번째 인수로 딕셔너리 안의 정보를 POST 방식으로 보낸다.
+        self.client.post(
+            '/blog/create_post/',
+            {
+                'title': 'Post Form 만들기',
+                'content': 'Post Form 페이지 만들기',
+            }
+        )
+        self.assertEqual(Post.objects.count(), 4)
+        # Post.objects.last()로 마지막 Post 레코드를 가져와 last_post 변수에 저장하고 제목이 일치한지 확인한다.
+        # 작성자와 작성시간 필드는 자동으로 채워지게 views.py에 구현한다.
+        last_post = Post.objects.last()
+        self.assertEqual(last_post.title, "Post Form 만들기")
+        self.assertEqual(last_post.author.username, 'jus')
