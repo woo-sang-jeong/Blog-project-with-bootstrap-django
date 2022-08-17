@@ -1,9 +1,9 @@
 # FBV 방식으로 제작할 때 필요 : from django.shortcuts import render
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Category, Tag
-
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -26,7 +26,7 @@ class PostDetail(DetailView):
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
 
-class PostCreate(LoginRequiredMixin, UserPassesTestMixin ,CreateView):
+class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     # model.py의 Post 클라스 모델을 사용한다 선언
     model = Post
     # Post 모델에 사용할 필드명을 리스트로 작성하여 fields 변수에 저장
@@ -46,6 +46,22 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin ,CreateView):
         # 비로그인시 redirect() 함수에 의해 /blog/ 로 되돌려 보낸다.
         else:
             return redirect('/blog/')
+
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    model = Post
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category', 'tags']
+
+    # CBV로 뷰를 만들 때 template_name을 지정해 원하는 html 파일을 템플릿 파일로 설정 할 수 있다.
+    template_name = 'blog/post_update_form.html'
+
+    # self.get_object()는 UpdateView의 메서드로 Post.objects.get(pk=pk)와 동일한 역할을 한다.
+    # Post 인스터스의 author 필드가 방문자와 동일한 경우 dispatch()가 제 역할을 하게된다.
+    # 조건 불만족시 raise PermissionDenied를 실행한다.
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(PostUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
 
 # 어느 class 에 속하지 않은 함수들이다. urls.py와 연결 되어 있다.
 def category_page(request, slug):
@@ -84,6 +100,7 @@ def tag_page(request, slug):
             'tag': tag
         }
     )
+
 
 """
 FBV 방식으로 제작한 함수

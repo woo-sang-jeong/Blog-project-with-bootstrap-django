@@ -237,3 +237,55 @@ class TestView(TestCase):
         last_post = Post.objects.last()
         self.assertEqual(last_post.title, "Post Form 만들기")
         self.assertEqual(last_post.author.username, 'jus')
+
+    def test_update_post(self):
+        # URL 형태는 /blog/update_post/포스트.pk
+        update_post_url = f'/blog/update_post/{self.post_003.pk}/'
+
+        # 비로그인 상황
+        response = self.client.get(update_post_url)
+        self.assertNotEqual(response.status_code, 200)
+
+        # 로그인 상황(작성자 X), 403 code는 권한이 없는 경우
+        self.assertNotEqual(self.post_003.author, self.user_woosang)
+        self.client.login(
+            username=self.user_woosang.username,
+            password='123456'
+        )
+        response = self.client.get(update_post_url)
+        self.assertEqual(response.status_code, 403)
+
+        # 로그인 상황(작성자 O)
+        self.client.login(
+            username=self.post_003.author.username,
+            password='123123'
+        )
+        response = self.client.get(update_post_url)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # 타이틀이 Edit Post - Blog 인지, 메인영역에 Edit Post가 있는지 확인
+        # 문제 없을시 title, content, category 값을 수정 후 POST 방식으로 update_post_url에 보낸다.
+        self.assertEqual('Edit Post - Blog', soup.title.text)
+        main_area = soup.find('div', id='main-area')
+        self.assertIn('Edit Post', main_area.text)
+
+        response = self.client.post(
+            update_post_url,
+            {
+                'title': '세 번째 포스트 수정',
+                'content': 'hi world',
+                'category': self.category_music.pk
+            },
+            follow=True
+        )
+        # title, content, category가 제대로 수정 되었는지 확인
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_area = soup.find('div', id='main-area')
+        self.assertIn('세 번째 포스트 수정', main_area.text)
+        self.assertIn('hi world', main_area.text)
+        self.assertIn(self.category_music.name, main_area.text)
+
+
+
+
