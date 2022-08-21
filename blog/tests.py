@@ -223,12 +223,17 @@ class TestView(TestCase):
         main_area = soup.find('div', id='main-area')
         self.assertIn('Create New Post', main_area.text)
 
+        # id가 id_tags_str인 main_area 영역에 input이 존재한지 확인한다.
+        tag_str_input = main_area.find('input', id='id_tags_str')
+        self.assertTrue(tag_str_input)
+
         # 첫번째 인수로 URL, 두번째 인수로 딕셔너리 안의 정보를 POST 방식으로 보낸다.
         self.client.post(
             '/blog/create_post/',
             {
                 'title': 'Post Form 만들기',
                 'content': 'Post Form 페이지 만들기',
+                'tags_str': 'test tag; 테스트 태그, 파이썬'
             }
         )
         self.assertEqual(Post.objects.count(), 4)
@@ -237,6 +242,11 @@ class TestView(TestCase):
         last_post = Post.objects.last()
         self.assertEqual(last_post.title, "Post Form 만들기")
         self.assertEqual(last_post.author.username, 'jus')
+
+        self.assertEqual(last_post.tags.count(), 3)
+        self.assertTrue(Tag.objects.get(name='test tag'))
+        self.assertTrue(Tag.objects.get(name='테스트 태그'))
+        self.assertEqual(Tag.objects.count(), 6)
 
     def test_update_post(self):
         # URL 형태는 /blog/update_post/포스트.pk

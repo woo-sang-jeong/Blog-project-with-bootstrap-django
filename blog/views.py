@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Category, Tag
 from django.core.exceptions import PermissionDenied
+from django.utils.text import slugify
 
 # Create your views here.
 
@@ -42,7 +43,34 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         # form_valid() 함수에 현재의 form을 인자로 보내 처리한다.
         if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
             form.instance.author = current_user
-            return super(PostCreate, self).form_valid(form)
+
+            # CreateView의 form_valid() 함수의 결과값을 response 변수에 담아둔다.
+            response = super(PostCreate, self).form_valid(form)
+
+            # 1 blog 참조
+            tags_str = self.request.POST.get('tags_str')
+            # 2
+            if tags_str:
+                tags_str = tags_str.strip()
+
+                tags_str = tags_str.replace(',', ';')
+                tags_list = tags_str.split(';')
+
+                for t in tags_list:
+                    # 3
+                    t = t.strip()
+                    # 4
+                    tag, is_tag_created = Tag.objects.get_or_create(name=t)
+                    # 5
+                    if is_tag_created:
+                        tag.slug = slugify(t, allow_unicode=True)
+                        tag.save()
+                    # 6
+                    self.object.tags.add(tag)
+            # 7
+            return response
+
+
         # 비로그인시 redirect() 함수에 의해 /blog/ 로 되돌려 보낸다.
         else:
             return redirect('/blog/')
