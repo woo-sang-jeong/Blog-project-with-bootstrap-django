@@ -77,7 +77,7 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category', 'tags']
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
 
     # CBV로 뷰를 만들 때 template_name을 지정해 원하는 html 파일을 템플릿 파일로 설정 할 수 있다.
     template_name = 'blog/post_update_form.html'
@@ -90,6 +90,38 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
             return super(PostUpdate, self).dispatch(request, *args, **kwargs)
         else:
             raise PermissionDenied
+
+    # post_update_form.html의 tags_str_default에 값을 넘겨주기 위한 함수
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdate, self).get_context_data()
+        if self.object.tags.exists():
+            tags_str_list = list()
+            for t in self.object.tags.all():
+                tags_str_list.append(t.name)
+            context['tags_str_default'] = '; '.join(tags_str_list)
+
+        return context
+
+    def form_valid(self, form):
+        response = super(PostUpdate, self).form_valid(form)
+        self.object.tags.clear()
+
+        tags_str = self.request.POST.get('tags_str')
+        if tags_str:
+            tags_str = tags_str.strip()
+            tags_str = tags_str.replace(',', ';')
+            tags_list = tags_str.split(';')
+
+            for t in tags_list:
+                t = t.strip()
+                tag, is_tag_create = Tag.objects.get_or_create(name=t)
+                if is_tag_create:
+                    tag.slug = slugify(t, allow_unicode=True)
+                    tag.save()
+                self.object.tags.add(tag)
+
+        return response
+
 
 # 어느 class 에 속하지 않은 함수들이다. urls.py와 연결 되어 있다.
 def category_page(request, slug):

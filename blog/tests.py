@@ -280,12 +280,18 @@ class TestView(TestCase):
         main_area = soup.find('div', id='main-area')
         self.assertIn('Edit Post', main_area.text)
 
+        # main 영역에 id가 id_tags_str인 input이 있는지 확인
+        tag_str_input = main_area.find('input', id='id_tags_str')
+        self.assertTrue(tag_str_input)
+        self.assertIn('bootstrap; django', tag_str_input.attrs['value'])
+
         response = self.client.post(
             update_post_url,
             {
                 'title': '세 번째 포스트 수정',
                 'content': 'hi world',
-                'category': self.category_music.pk
+                'category': self.category_music.pk,
+                'tags_str': 'bootstrap; django, test tag'
             },
             follow=True
         )
@@ -295,6 +301,10 @@ class TestView(TestCase):
         self.assertIn('세 번째 포스트 수정', main_area.text)
         self.assertIn('hi world', main_area.text)
         self.assertIn(self.category_music.name, main_area.text)
+        self.assertIn('bootstrap', main_area.text)
+        self.assertIn('django', main_area.text)
+        self.assertIn('test tag', main_area.text)
+        self.assertNotIn('python', main_area.text)
 
 
 
