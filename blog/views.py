@@ -2,6 +2,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+from .forms import PostForm
 from .models import Post, Category, Tag
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
@@ -31,11 +33,14 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     # model.py의 Post 클라스 모델을 사용한다 선언
     model = Post
     # Post 모델에 사용할 필드명을 리스트로 작성하여 fields 변수에 저장
-    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    #fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    form_class = PostForm
 
+    # UserPassesTestMixin을 위한 함수
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
 
+    #form_valid는 유효성 검사를 뜻한다.
     def form_valid(self, form):
         # 웹 사이트 방문자 current_user
         current_user = self.request.user

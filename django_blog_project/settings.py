@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'crispy_forms',
+    'django_summernote',
 
     'blog',
     'single_pages',
@@ -127,6 +128,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+#클릭재킹 방지
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
