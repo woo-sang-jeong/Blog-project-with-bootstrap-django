@@ -82,7 +82,8 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    #fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    form_class = PostForm
 
     # CBV로 뷰를 만들 때 template_name을 지정해 원하는 html 파일을 템플릿 파일로 설정 할 수 있다.
     template_name = 'blog/post_update_form.html'

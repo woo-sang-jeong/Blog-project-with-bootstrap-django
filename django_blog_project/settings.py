@@ -42,6 +42,14 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_summernote',
 
+    #allauth 라이브러리
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # 구글 로그인
+    'allauth.socialaccount.providers.google',
+
     'blog',
     'single_pages',
 
@@ -136,3 +144,15 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SITE_ID = 1
+# 회원가입시 이메일 요구
+ACCOUNT_EMAIL_REQUIRED = True
+# 이메일 검증(아직 미사용)
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+LOGIN_REDIRECT_URL = '/blog/'
