@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Comment
 
 
 # Create your tests here.
@@ -43,6 +43,14 @@ class TestView(TestCase):
         )
         self.post_003.tags.add(self.tag_bootstrap)
         self.post_003.tags.add(self.tag_django)
+
+        self.comment_001 = Comment.objects.create(
+            post=self.post_001,
+            author=self.user_jus,
+            content='첫 번째 댓글 Test'
+        )
+
+
 
     def category_card_test(self, soup):
         categories_card = soup.find('div', id='categories-card')
@@ -168,6 +176,12 @@ class TestView(TestCase):
         self.assertIn(self.tag_python.name, post_area.text)
         self.assertNotIn(self.tag_bootstrap.name, post_area.text)
         self.assertNotIn(self.tag_django.name, post_area.text)
+
+        # comment test,
+        comments_area = soup.find('div', id='comment-area')
+        comment_001_area = comments_area.find('div', id='comment-1')
+        self.assertIn(self.comment_001.author.username, comment_001_area.text)
+        self.assertIn(self.comment_001.content, comment_001_area.text)
 
     def test_category_page(self):
         # 카테고리 페이지의 고유 URL을 통해 정상적으로 접속되는지 확인한다.
