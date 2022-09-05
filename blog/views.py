@@ -4,11 +4,12 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .forms import PostForm
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Comment
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from .forms import CommentForm
 from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 
@@ -22,6 +23,7 @@ class PostList(ListView):
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
 
+
 class PostDetail(DetailView):
     model = Post
 
@@ -32,18 +34,19 @@ class PostDetail(DetailView):
         context['comment_form'] = CommentForm
         return context
 
+
 class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     # model.py의 Post 클라스 모델을 사용한다 선언
     model = Post
     # Post 모델에 사용할 필드명을 리스트로 작성하여 fields 변수에 저장
-    #fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    # fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
     form_class = PostForm
 
     # UserPassesTestMixin을 위한 함수
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
 
-    #form_valid는 유효성 검사를 뜻한다.
+    # form_valid는 유효성 검사를 뜻한다.
     def form_valid(self, form):
         # 웹 사이트 방문자 current_user
         current_user = self.request.user
@@ -83,9 +86,10 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         else:
             return redirect('/blog/')
 
+
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
-    #fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    # fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
     form_class = PostForm
 
     # CBV로 뷰를 만들 때 template_name을 지정해 원하는 html 파일을 템플릿 파일로 설정 할 수 있다.
@@ -132,6 +136,17 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
         return response
 
 
+class CommentUpdate(LoginRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(CommentUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+
 # 어느 class 에 속하지 않은 함수들이다. urls.py와 연결 되어 있다.
 def category_page(request, slug):
     if slug == 'no_category':
@@ -152,6 +167,7 @@ def category_page(request, slug):
         }
     )
 
+
 def tag_page(request, slug):
     # URL에서 인자로 넘어온 slug와 동일한 slug를 가진 태그를 쿼리셋으로 가져와 tag 변수에 저장한다.
     tag = Tag.objects.get(slug=slug)
@@ -170,21 +186,22 @@ def tag_page(request, slug):
         }
     )
 
-def new_comment(request, pk):
-    if request.user.is_authenticated:
-        post = get_object_or_404(Post, pk=pk)
 
-        if request.method == 'POST':
-            comment_form = CommentForm(request.POST)
-            if comment_form.is_valid():
+def new_comment(request, pk):
+    if request.user.is_authenticated:  # 1
+        post = get_object_or_404(Post, pk=pk)  # 2
+
+        if request.method == 'POST':  # 3
+            comment_form = CommentForm(request.POST)  # 4
+            if comment_form.is_valid():  # 5
                 comment = comment_form.save(commit=False)
                 comment.post = post
                 comment.author = request.user
                 comment.save()
-                return redirect(post.get_absolute_url())
-        else:
+                return redirect(comment.get_absolute_url())  # 6
+        else:  # 3
             return redirect(post.get_absolute_url)
-    else:
+    else:  # 1
         raise PermissionDenied
 
 

@@ -9,6 +9,7 @@ urlpatterns = [
     path('<int:pk>/', views.PostDetail.as_view()),       # 클래스인 경우 클래스명 입력후 .as_view()까지 입력
     path('', views.PostList.as_view()),
     path('<int:pk>/new_comment/', views.new_comment),
+    path('update_comment/<int:pk>/', views.CommentUpdate.as_view()),
     # path('<int:pk>/', views.single_post_page),
     # path('', views.index),
 ]

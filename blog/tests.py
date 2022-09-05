@@ -3,9 +3,7 @@ from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
 from .models import Post, Category, Tag, Comment
 
-
 # Create your tests here.
-
 class TestView(TestCase):
     def setUp(self):
         self.client = Client()
@@ -49,8 +47,6 @@ class TestView(TestCase):
             author=self.user_jus,
             content='첫 번째 댓글 Test'
         )
-
-
 
     def category_card_test(self, soup):
         categories_card = soup.find('div', id='categories-card')
@@ -337,7 +333,7 @@ class TestView(TestCase):
 
         # 로그인한 상태
         self.client.login(username='jus', password='123123')
-        response = self.client.get(self.post_001.get_absolute_url)
+        response = self.client.get(self.post_001.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -349,9 +345,9 @@ class TestView(TestCase):
         # POST 방식으로 댓글 내용을 서버로 보내고 그 결과를 response에 담는다.
         # POST로 보내는 경우 서버에서 처리 후 리다이렉트 되는데 이때 follow가 따라가도록 설정해 주는 역할이다.
         response = self.client.post(
-            self.post_001.get_absolute_url + 'new_comment/',
+            self.post_001.get_absolute_url() + 'new_comment/',
             {
-                'content': "jus's comment test",
+                'content': "jus comment test",
             },
             follow=True
         )
@@ -372,6 +368,67 @@ class TestView(TestCase):
         new_comment_div = comment_area.find('div', id=f'comment-{new_comment.pk}')
         self.assertIn('jus', new_comment_div.text)
         self.assertIn('jus comment test', new_comment_div.text)
+
+    def test_comment_update(self):
+        comment_by_woosang = Comment.objects.create(
+            post=self.post_001,
+            author=self.user_woosang,
+            content='woo sang의 댓글'
+        )
+
+        response = self.client.get(self.post_001.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # 수정 버튼이 보이지 않아야 하므로 id는 comment의 pk-update-btn으로 한다.
+        comment_area = soup.find('div', id='comment-area')
+        self.assertFalse(comment_area.find('a', id='comment-1-update-btn'))
+        self.assertFalse(comment_area.find('a', id='comment-2-update-btn'))
+
+        # 로그인 상태
+        self.client.login(username='jus', password='123123')
+        response = self.client.get(self.post_001.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # 위에서 jus로 로그인 했으므로 woosang의 댓글 수정 버튼이 보여서는 안 된다.
+        # edit 버튼의 경로는 blog/update_comment/pk 이다.
+        comment_area = soup.find('div', id='comment-area')
+        self.assertFalse(comment_area.find('a', id='comment-2-update-btn'))
+        comment_001_update_btn = comment_area.find('a', id='comment-1-update-btn')
+
+        # edit을 클릭시 /blog/update_comment/1/ 경로로 이동 하는가?
+        self.assertIn('edit', comment_001_update_btn.text)
+        self.assertEqual(comment_001_update_btn.attrs['href'], '/blog/update_comment/1/')
+
+        response = self.client.get('/blog/update_comment/1/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.assertEqual('Edit Comment - Blog', soup.title.text)
+        update_comment_form = soup.find('form', id='comment-form')
+        content_textarea = update_comment_form.find('textarea', id='id_content')
+        self.assertIn(self.comment_001.content, content_textarea.text)
+
+        # POST방식으로 서버에 요청하면 CommentUpdate 클래스에서 처리된 후 comment의 절대 경로로 리다이렉트 된다.
+        # 리다이렉트를 위해 follow=True로 설정한다.
+        response = self.client.post(
+            f'/blog/update_comment/1/',
+            {
+                'content': "댓글 수정",
+            },
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        comment_001_div = soup.find('div', id='comment-1')
+        self.assertIn('댓글 수정', comment_001_div.text)
+        self.assertIn('Updated: ', comment_001_div.text)
+
+
+
+
 
 
 
