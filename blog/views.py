@@ -9,6 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from .forms import CommentForm
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 # Create your views here.
@@ -148,6 +149,24 @@ class CommentUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionDenied
 
 
+class PostSearch(PostList):
+    paginate_by = None                                                           # 1
+
+    def get_queryset(self):
+        q = self.kwargs['q']                                                     # 2
+        post_list = Post.objects.filter(
+            Q(title__contains=q) | Q(tags__name__contains=q)                     # 3
+        ).distinct()                                                             # 4
+        return post_list
+
+    def get_context_data(self, **kwargs):
+        context = super(PostSearch, self).get_context_data()
+        q = self.kwargs['q']
+        context['search_info'] = f'Search: {q} ({self.get_queryset().count()})'  # 5
+
+        return context
+
+
 # 어느 class 에 속하지 않은 함수들이다. urls.py와 연결 되어 있다.
 def category_page(request, slug):
     if slug == 'no_category':
@@ -214,6 +233,10 @@ def delete_comment(request, pk):
         return redirect(post.get_absolute_url())
     else:
         raise PermissionDenied
+
+
+
+
 
 """
 FBV 방식으로 제작한 함수
