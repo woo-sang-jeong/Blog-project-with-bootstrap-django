@@ -20,12 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rg!uk!ee2=ierj&#z^@1tqiv4yz$bcl$_p835bc4i7h5v01aqc'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rg!uk!ee2=ierj&#z^@1tqiv4yz$bcl$_p835bc4i7h5v01aqc')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# 로컬에서 개발중일 때는 true(1)로 하고 그렇지 않은 경우 0으로 한다.
+DEBUG = int(os.environ.get('DEBUG', 1))
 
-ALLOWED_HOSTS = []
+# HOST로 허용하는 주소를 적는 곳이다. env 파일에서 DJANGO_ALLOWED_HOST에서 읽어 올 수 있으면 그 값을 쓰고 없을시 이전과 동일하게 한다.
+if os.environ.get('DJANGO_ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition

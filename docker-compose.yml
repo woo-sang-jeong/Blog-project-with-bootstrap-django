@@ -1,0 +1,15 @@
+# doker compose 파일 포맷을 최신버전으로 사용하겠다는 뜻이다. 보통 별일 없다면 3으로 설정한다.
+version: '3'
+
+services:
+  web:                                                  # web이라는 서비스 실행
+    build: .                                            # 현재 폴더를 build한다.
+    command: python manage.py runserver 0.0.0.0:8000    # cmber 터미널에서 입력했던 서버 실행 명령어를 대신 입력한다.
+    volumes:                                            # volumes으로 로컬의 폴더와 도커의 폴더를 연결한다.
+      - ./:/usr/src/app/                                # /usr/src/app 폴더와 연결한다.
+    ports:                                              # 평소와 같은 8000 port를 사용한다.
+      - 8000:8000
+    env_file:                                           # settings.py에서 관리되는 요소 일부를
+      - ./.env.dev                                      # 개발환경(.env.dev)와 배포환경(.env.prod)으로 나누어 관리한다.
+                                                        # 둘 중에 무엇을 불러올지는 setting.py에서 값을 불러와 사용한다.
+                                                        # 지금은 개발 중 이므로 개발환경인 .env.dev를 사용한다.
