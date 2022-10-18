@@ -1,185 +1,189 @@
 <!doctype html>
 {% load static %}
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>약력</title>
 
-    <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
-    <link rel="stylesheet" href="{% static 'single_pages/css/about_me.css' %}" media="screen">
-    <script src="https://kit.fontawesome.com/08f292796e.js" crossorigin="anonymous"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>약력</title>
+
+  <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
+  <link rel="stylesheet" href="{% static 'single_pages/css/about_me.css' %}" media="screen">
+  <script src="https://kit.fontawesome.com/08f292796e.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-{% include 'blog/navbar.html' %}
+  {% include 'blog/navbar.html' %}
 
-<section>
+  <section>
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-lg-8">
-                <h1>안녕하세요 정재윤입니다.</h1>
-                <br/>
-                <p class="lead">
-                    1990년 경찰간부후보 38기로 경찰직에 입문하여 은퇴를 앞두고 있습니다.<br/>
-                    현재 조경과 건축을 제2의 직업으로 삼고 있습니다.
-                </p>
+      <div class="row">
+        <div class="col-lg-8">
+          <h1>신세계에 오신걸 환영합니다!</h1>
+          <br />
+          <p class="lead">
+            새로운 세계가 열렸습니다.<br />
+            33년 공직생활과는 다른, 낯설지만 기대에 찬 딴 세상 입니다.<br />아직은 신세계와 거리가 먼 예비 신세계인, 또는 이미 신세계의 문턱에 와계신
+            분들이 꿈꾸는 각자의 신세계!<br />
+            함께 하시지요
+          </p>
 
-                <ul>
-                    <li class="mt-4">학력</li>
-                    <ul>
-                        <li>목포대학교 - 행정학과</li>
-                        <li>연세대학교 행정대학원 - 경찰사법행정</li>
-                    </ul>
-                    <li class="mt-4">경력</li>
-                    <ul>
-                        <li>여수경찰서장</li>
-                        <li>광양경찰서장</li>
-                        <li>장성경찰서장</li>
-                        <li>영광경찰서장</li>
-                        <li>광산경찰서장</li>
-                        <li>광주북부경찰서장</li>
-                    </ul>
-                    <li class="mt-4">자격증</li>
-                    <ul>
-                        <li>행정사</li>
-                        <li>조경기능사</li>
-                        <li>실내건축기능사</li>
-                    </ul>
-                </ul>
-            </div>
-            <div class="col-lg-4">
-                <img class="img-fluid" src="{% static 'single_pages/image/picture.jpg' %}">
-            </div>
+          <ul>
+            <li class="mt-4" style="font-size: 25px;"><strong>Scholarship</strong></li>
+            <ul>
+              <li class="mt-4">전남 목포에서 학창시절 대부분을 보내고,<br /> 연세대학교 행정대학원(경찰사법행정) 졸업하다.</li>
+            </ul>
+            <li class="mt-4" style="font-size: 25px;"><strong>Business career</strong></li>
+            <ul>
+              <li class="mt-4">1990년 이후 서울 등 수도권과 강원,전남,광주 등지에서<br /> 33년 경찰관 생활을 마치고 2022년
+                정년 퇴임하다.</li>
+            </ul>
+            <li class="mt-4" style="font-size: 25px;"><strong>Certification</strong></li>
+            <ul>
+              <li class="mt-2">행정사</li>
+              <li class="mt-2">조경기능사</li>
+              <li class="mt-2">실내건축기능사</li>
+            </ul>
+          </ul>
         </div>
+        <div class="col-lg-4">
+          <img id="main-picture" class="img-fluid" src="{% static 'single_pages/image/picture.jpg' %}">
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section class="bg-light" margin-for-footer>
+  <section class="bg-light" margin-for-footer>
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h1>Portfolio</h1>
-            </div>
+      <div class="row">
+        <div class="col-12">
+          <h1>Portfolio</h1>
         </div>
-        <div class="row">
-            <div class="col-lg-4">      <!--첫 번째 port -->
-                <div class="card" data-toggle="modal" data-target="#house">
-                    <img class="card-img-top" src="{% static 'single_pages/image/house.jpg' %}" style="width:350px; height:260px;">
-                    <div class="card-body">
-                        <h5 class="card-title">직접 설계한 전원주택 집 입니다.</h5>
-                        <p>오랜 준비 작업 끝에 2015년에 공사를 시작 하고 완공한 집 입니다.</p>
-                    </div>
-                </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <!--첫 번째 port -->
+          <div class="card" data-toggle="modal" data-target="#house">
+            <img class="card-img-top" src="{% static 'single_pages/image/house.jpg' %}"
+              style="width:350px; height:260px;">
+            <div class="card-body">
+              <h5 class="card-title">2015년 전남 장성에 전원주택 터를 잡았습니다.</h5>
+              <p>공간활용 극대화에 방점을 두고 직접 설계한 주택(안채)입니다.</p>
             </div>
-            <div class="col-lg-4">       <!--두 번째 port-->
-                <div class="card" data-toggle="modal" data-target="#sehouse">
-                    <img class="card-img-top" src="{% static 'single_pages/image/sehouse.jpg' %}" style="width:350px; height:260px;">
-                    <div class="card-body">
-                        <h5 class="card-title">직접 설계한 별채 입니다.</h5>
-                        <p>역시 오랜 준비 끝에 골조와 외곽 부분만 완성 후 내부 부분을 직접 공사하고 있습니다.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">        <!--세 번째 port-->
-                <div class="card" data-toggle="modal" data-target="#garden">
-                    <img class="card-img-top" src="{% static 'single_pages/image/garden.jpg' %}" style="width:350px; height:260px;">
-                    <div class="card-body">
-                        <h5 class="card-title">직접 만든 정원 입니다.</h5>
-                        <p>정말 손이 많이 갔습니다.</p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
-</section>
-
-<!-- Modal -->
-<div class="modal fade" id="house" tabindex="-1" aria-labelledby="houseModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="houseModalLabel">전원주택</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <div class="row">
-              <div class="col-lg-7">
-                <img class="img-fluid" src="{% static 'single_pages/image/house.jpg' %}">
-              </div>
-              <div class="col-lg-5">
-                  <p>
-                      직접 설계한 전원주택 입니다.
-                  </p>
-              </div>
+        <div class="col-lg-4">
+          <!--두 번째 port-->
+          <div class="card" data-toggle="modal" data-target="#sehouse">
+            <img class="card-img-top" src="{% static 'single_pages/image/sehouse.jpg' %}"
+              style="width:350px; height:260px;">
+            <div class="card-body">
+              <h5 class="card-title">2020년 안채 오른편에 사랑채를 마련 하였습니다.</h5>
+              <p>외장재 시공과 내부 가설 전기 배관에 이어 손수 인테리어 작업 중 입니다.</p>
+            </div>
           </div>
+        </div>
+        <div class="col-lg-4">
+          <!--세 번째 port-->
+          <div class="card" data-toggle="modal" data-target="#garden">
+            <img class="card-img-top" src="{% static 'single_pages/image/garden.jpg' %}"
+              style="width:350px; height:260px;">
+            <div class="card-body">
+              <h5 class="card-title">집사람과 함께 가꾼 정원입니다.</h5>
+              <p>조경기능사의 요람이기도 하고요</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal fade" id="house" tabindex="-1" aria-labelledby="houseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="houseModalLabel">전원주택</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-7">
+              <img class="img-fluid" src="{% static 'single_pages/image/house.jpg' %}">
+            </div>
+            <div class="col-lg-5">
+              <p>
+                직접 설계한 전원주택 입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="sehouse" tabindex="-1" aria-labelledby="sehouseModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="sehouseModalLabel">별채</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+  <!-- Modal -->
+  <div class="modal fade" id="sehouse" tabindex="-1" aria-labelledby="sehouseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sehouseModalLabel">별채</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
           <div class="row">
-              <div class="col-lg-7">
-                <img class="img-fluid" src="{% static 'single_pages/image/sehouse.jpg' %}">
-              </div>
-              <div class="col-lg-5">
-                  <p>
-                      직접 설계한 별채 입니다.
-                  </p>
-              </div>
+            <div class="col-lg-7">
+              <img class="img-fluid" src="{% static 'single_pages/image/sehouse.jpg' %}">
+            </div>
+            <div class="col-lg-5">
+              <p>
+                직접 설계한 별채 입니다.
+              </p>
+            </div>
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="garden" tabindex="-1" aria-labelledby="gardenModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="gardenModalLabel">전원주택</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+  <!-- Modal -->
+  <div class="modal fade" id="garden" tabindex="-1" aria-labelledby="gardenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="gardenModalLabel">전원주택</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
           <div class="row">
-              <div class="col-lg-7">
-                <img class="img-fluid" src="{% static 'single_pages/image/garden.jpg' %}">
-              </div>
-              <div class="col-lg-5">
-                  <p>
-                      직접 설계하고 조성한 정원 입니다.
-                  </p>
-              </div>
+            <div class="col-lg-7">
+              <img class="img-fluid" src="{% static 'single_pages/image/garden.jpg' %}">
+            </div>
+            <div class="col-lg-5">
+              <p>
+                직접 설계하고 조성한 정원 입니다.
+              </p>
+            </div>
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">

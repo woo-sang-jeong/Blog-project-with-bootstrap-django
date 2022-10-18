@@ -1,3 +1,25 @@
 .margin-for-footer {
     margin-bottom: 130px;
 }
+
+#main-picture {
+    border-radius: 50%;
+    margin-left: 40px;
+}
+
+h1 {
+    font-family: impact, charcoal, sans-serif;
+}
+
+p {
+    font-family: impact, charcoal, sans-serif;
+}
+
+ul {
+    font-size: large;
+}
+
+
+li {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
