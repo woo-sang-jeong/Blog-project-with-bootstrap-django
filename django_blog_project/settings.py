@@ -20,7 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rg!uk!ee2=ierj&#z^@1tqiv4yz$bcl$_p835bc4i7h5v01aqc')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', 'django-insecure-rg!uk!ee2=ierj&#z^@1tqiv4yz$bcl$_p835bc4i7h5v01aqc')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # 로컬에서 개발중일 때는 true(1)로 하고 그렇지 않은 경우 0으로 한다.
@@ -47,7 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_summernote',
 
-    #allauth 라이브러리
+    # allauth 라이브러리
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -96,8 +97,12 @@ WSGI_APPLICATION = 'django_blog_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
+        'USER': os.environ.get('SQL_USER', 'user'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD', 'password'),
+        'HOST': os.environ.get('SQL_HOST', 'localhost'),
+        'PORT': os.environ.get('SQL_PORT', '5432')
     }
 }
 
@@ -142,7 +147,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-#클릭재킹 방지
+# 클릭재킹 방지
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Default primary key field type

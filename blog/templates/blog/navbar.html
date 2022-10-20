@@ -4,7 +4,7 @@
     <div class="container">
         <a class="navbar-brand" href="/"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -22,14 +22,14 @@
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                       role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if user.socialaccount_set.all.0.get_avatar_url %}
-                            <img class="rounded-circle" width="25px"
-                                 src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="">
+                        <img class="rounded-circle" width="25px" src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                            alt="">
                         {% else %}
-                            <img class="rounded-circle"
-                                 src="https://doitdjango.com/avatar/id/1289/01240e4c28f9c4bd/svg/{{ user.email }}">
+                        <img class="rounded-circle" width="70px"
+                            src="https://doitdjango.com/avatar/id/1289/01240e4c28f9c4bd/svg/{{ user.email }}">
                         {% endif %}
                         &nbsp;
                         {{ user.username }}
@@ -61,8 +61,9 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <a role="button" class="btn btn-outline-dark btn-block btn-sm" href="{% provider_login_url 'google' %}"><i
-                                class="fa-brands fa-google"></i>&nbsp;&nbsp; Log in with Google
+                        <a role="button" class="btn btn-outline-dark btn-block btn-sm"
+                            href="{% provider_login_url 'google' %}"><i class="fa-brands fa-google"></i>&nbsp;&nbsp; Log
+                            in with Google
                         </a>
                         <a role="button" class="btn btn-outline-dark btn-block btn-sm" href="/accounts/login/">
                             <i class="far fa-envelope"></i>&nbsp&nbsp Log in with Username
@@ -82,4 +83,3 @@
         </div>
     </div>
 </div>
-
